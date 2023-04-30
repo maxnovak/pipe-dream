@@ -48,8 +48,9 @@ module.exports = (env, argv) => {
                 },
             })],
         },
-
-
+        experiments: {
+            topLevelAwait: true
+        },
         // Explain webpack how to do Typescript
         module: {
             rules: [

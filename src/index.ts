@@ -1,4 +1,4 @@
-import { Application, Sprite } from 'pixi.js'
+import { AnimatedSprite, Application, BaseTexture, Spritesheet } from 'pixi.js';
 
 const app = new Application({
 	view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
@@ -9,11 +9,49 @@ const app = new Application({
 	height: 480
 });
 
-const clampy: Sprite = Sprite.from("clampy.png");
+const pipeSheet = {
+	frames: {
+		startDownEmpty: {
+			frame: { x:0, y: 0, w: 16, h:16 },
+			sourceSize: { w: 16, h: 16 },
+			spriteSourceSize: { x: 0, y: 0, w: 16, h: 16 },
 
-clampy.anchor.set(0.5);
+		},
+		startDownFull: {
+			frame: { x: 16, y:0, w:16, h:16 },
+			sourceSize: { w: 16, h: 16 },
+			spriteSourceSize: { x: 0, y: 0, w: 16, h: 16 }
+		},
+	},
+	meta: {
+		image: 'NES-PipeDream-Pipes.png',
+		format: 'RGBA8888',
+		size: { w: 384, h: 528 },
+		scale: '1',
+	},
+	animations: {
+		pipes: ['startDownEmpty','startDownFull'] //array of frames by name
 
-clampy.x = app.screen.width / 2;
-clampy.y = app.screen.height / 2;
+	},
+};
 
-app.stage.addChild(clampy);
+// Create the SpriteSheet from data and image
+const spritesheet = new Spritesheet(
+	BaseTexture.from(pipeSheet.meta.image),
+	pipeSheet
+);
+
+// Generate all the Textures asynchronously
+await spritesheet.parse();
+
+// spritesheet is ready to use!
+const anim = new AnimatedSprite(spritesheet.animations.pipes);
+
+// set the animation speed
+anim.animationSpeed = 0.01;
+
+// play the animation on a loop
+anim.play();
+
+// add it to the stage to render
+app.stage.addChild(anim);
