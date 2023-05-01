@@ -1,4 +1,5 @@
-import { AnimatedSprite, Application, BaseTexture, Spritesheet } from 'pixi.js';
+import { Application, BaseTexture, Container, Sprite, Spritesheet } from 'pixi.js';
+import { GRID_SIZE, pipeSheet } from './constants';
 
 const app = new Application({
 	view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
@@ -6,52 +7,27 @@ const app = new Application({
 	autoDensity: true,
 	backgroundColor: 0x6495ed,
 	width: 640,
-	height: 480
+	height: 480,
 });
 
-const pipeSheet = {
-	frames: {
-		startDownEmpty: {
-			frame: { x:0, y: 0, w: 16, h:16 },
-			sourceSize: { w: 16, h: 16 },
-			spriteSourceSize: { x: 0, y: 0, w: 16, h: 16 },
-
-		},
-		startDownFull: {
-			frame: { x: 16, y:0, w:16, h:16 },
-			sourceSize: { w: 16, h: 16 },
-			spriteSourceSize: { x: 0, y: 0, w: 16, h: 16 }
-		},
-	},
-	meta: {
-		image: 'NES-PipeDream-Pipes.png',
-		format: 'RGBA8888',
-		size: { w: 384, h: 528 },
-		scale: '1',
-	},
-	animations: {
-		pipes: ['startDownEmpty','startDownFull'] //array of frames by name
-
-	},
-};
-
-// Create the SpriteSheet from data and image
 const spritesheet = new Spritesheet(
 	BaseTexture.from(pipeSheet.meta.image),
 	pipeSheet
 );
 
-// Generate all the Textures asynchronously
 await spritesheet.parse();
 
-// spritesheet is ready to use!
-const anim = new AnimatedSprite(spritesheet.animations.pipes);
 
-// set the animation speed
-anim.animationSpeed = 0.01;
+const container = new Container();
+app.stage.addChild(container);
 
-// play the animation on a loop
-anim.play();
-
-// add it to the stage to render
-app.stage.addChild(anim);
+for (let i = 0; i < GRID_SIZE; i++) {
+	for (let j = 0; j < GRID_SIZE; j++) {
+		const square = new Sprite(spritesheet.textures.emptySquare)
+		square.x = i * 16;
+		square.y = j * 16;
+		square.eventMode = 'static';
+		square.on("pointerdown", () => { square.texture = spritesheet.textures.startDownEmpty});
+		app.stage.addChild(square);
+	}
+}
