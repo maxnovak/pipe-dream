@@ -48,7 +48,17 @@ export const pipeSheet = {
 			frame: { x: 240, y:0, w:16, h:16 },
 			sourceSize: { w: 16, h: 16 },
 			spriteSourceSize: { x: 0, y: 0, w: 16, h: 16 }
-		}
+		},
+		start: {
+			frame: { x: 128, y:0, w:16, h:16 },
+			sourceSize: { w: 16, h: 16 },
+			spriteSourceSize: { x: 0, y: 0, w: 16, h: 16 }
+		},
+		end: {
+			frame: { x: 144, y:0, w:16, h:16 },
+			sourceSize: { w: 16, h: 16 },
+			spriteSourceSize: { x: 0, y: 0, w: 16, h: 16 }
+		},
 	},
 	meta: {
 		image: 'NES-PipeDream-Pipes.png',

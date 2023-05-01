@@ -1,5 +1,6 @@
 import { Application, BaseTexture, Container, Sprite, Spritesheet } from 'pixi.js';
 import { GRID_SIZE, pipeSheet } from './constants';
+import { getRandomLocation } from './utils';
 
 const app = new Application({
 	view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
@@ -21,13 +22,31 @@ await spritesheet.parse();
 const container = new Container();
 app.stage.addChild(container);
 
-for (let i = 0; i < GRID_SIZE; i++) {
-	for (let j = 0; j < GRID_SIZE; j++) {
-		const square = new Sprite(spritesheet.textures.emptySquare)
-		square.x = i * 16;
-		square.y = j * 16;
-		square.eventMode = 'static';
-		square.on("pointerdown", () => { square.texture = spritesheet.textures.startDownEmpty});
-		app.stage.addChild(square);
+const setUpBoard = () => {
+	for (let i = 0; i < GRID_SIZE; i++) {
+		for (let j = 0; j < GRID_SIZE; j++) {
+			const square = new Sprite(spritesheet.textures.emptySquare)
+			square.x = i * 16;
+			square.y = j * 16;
+			square.name = `${i}x${j}`;
+			square.eventMode = 'static';
+			square.on("pointerdown", () => {
+				square.texture = spritesheet.textures.startDownEmpty;
+				console.log(square.name);
+			});
+			container.addChild(square);
+		}
 	}
+
+	const startingTile = container.getChildByName(getRandomLocation(GRID_SIZE, GRID_SIZE)) as Sprite;
+	startingTile.name = "start";
+	startingTile.texture = spritesheet.textures.startDownEmpty;
+	startingTile.addChild(new Sprite(spritesheet.textures.start));
+
+	const endingTile = container.getChildByName(getRandomLocation(GRID_SIZE, GRID_SIZE)) as Sprite;
+	endingTile.name = "end";
+	endingTile.texture = spritesheet.textures.startDownEmpty;
+	endingTile.addChild(new Sprite(spritesheet.textures.end));
 }
+
+setUpBoard();
