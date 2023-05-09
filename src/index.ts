@@ -1,5 +1,5 @@
 import { Application, BaseTexture, Container, Sprite, Spritesheet } from 'pixi.js';
-import { GRID_SIZE, pipeSheet } from './constants';
+import { GRID_SIZE, NUMBER_OF_TILES, PIPE_TYPES, pipeSheet } from './constants';
 import { getRandomLocation } from './utils';
 
 const app = new Application({
@@ -22,6 +22,11 @@ await spritesheet.parse();
 const container = new Container();
 app.stage.addChild(container);
 
+const tileFeed = new Container();
+tileFeed.x = 180;
+tileFeed.name = 'tilefeed';
+app.stage.addChild(tileFeed);
+
 const setUpBoard = () => {
 	for (let i = 0; i < GRID_SIZE; i++) {
 		for (let j = 0; j < GRID_SIZE; j++) {
@@ -32,7 +37,6 @@ const setUpBoard = () => {
 			square.eventMode = 'static';
 			square.on("pointerdown", () => {
 				square.texture = spritesheet.textures.startDownEmpty;
-				console.log(square.name);
 			});
 			container.addChild(square);
 		}
@@ -49,4 +53,21 @@ const setUpBoard = () => {
 	endingTile.addChild(new Sprite(spritesheet.textures.end));
 }
 
+const createFeed = () => {
+	for (let i = NUMBER_OF_TILES; i >= 0; i--) {
+		const tile = new Container();
+		tile.y = i * 18;
+		tile.name = `tile${i}`;
+		tileFeed.addChild(tile);
+	}
+	console.log(tileFeed.children)
+	for (let i = 0; i <= NUMBER_OF_TILES; i++) {
+		const randomPipe = Math.floor(Math.random() * PIPE_TYPES.length)
+		const tile = new Sprite(spritesheet.textures[`${PIPE_TYPES[randomPipe]}Empty`]);
+		const feed = tileFeed.getChildByName(`tile${i}`) as Sprite;
+		feed.addChild(tile);
+	}
+}
+
 setUpBoard();
+createFeed();
