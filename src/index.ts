@@ -36,7 +36,9 @@ const setUpBoard = () => {
 			square.name = `${i}x${j}`;
 			square.eventMode = 'static';
 			square.on("pointerdown", () => {
-				square.texture = spritesheet.textures.startDownEmpty;
+				const tile = tileFeed.getChildAt(0) as Container;
+				const tileSprite = tile.getChildAt(0) as Sprite;
+				square.texture = tileSprite.texture;
 			});
 			container.addChild(square);
 		}
