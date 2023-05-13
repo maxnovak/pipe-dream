@@ -1,6 +1,6 @@
 import { Application, BaseTexture, Container, Sprite, Spritesheet } from 'pixi.js';
-import { GRID_SIZE, NUMBER_OF_TILES, PIPE_TYPES, pipeSheet } from './constants';
-import { getRandomLocation } from './utils';
+import { GRID_SIZE, NUMBER_OF_TILES, pipeSheet } from './constants';
+import { getRandomLocation, getRandomTile } from './utils';
 
 const app = new Application({
 	view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
@@ -36,9 +36,14 @@ const setUpBoard = () => {
 			square.name = `${i}x${j}`;
 			square.eventMode = 'static';
 			square.on("pointerdown", () => {
-				const tile = tileFeed.getChildAt(0) as Container;
-				const tileSprite = tile.getChildAt(0) as Sprite;
+				const tileSprite = tileFeed.getChildAt(0) as Sprite;
 				square.texture = tileSprite.texture;
+				square.eventMode = 'none';
+				tileFeed.children.shift();
+				tileFeed.children.map((tile) => {
+					tile.y = tile.y + 18;
+				})
+				addNewTile();
 			});
 			container.addChild(square);
 		}
@@ -57,18 +62,17 @@ const setUpBoard = () => {
 
 const createFeed = () => {
 	for (let i = NUMBER_OF_TILES; i >= 0; i--) {
-		const tile = new Container();
+		const tile = getRandomTile(spritesheet);
 		tile.y = i * 18;
 		tile.name = `tile${i}`;
 		tileFeed.addChild(tile);
 	}
-	console.log(tileFeed.children)
-	for (let i = 0; i <= NUMBER_OF_TILES; i++) {
-		const randomPipe = Math.floor(Math.random() * PIPE_TYPES.length)
-		const tile = new Sprite(spritesheet.textures[`${PIPE_TYPES[randomPipe]}Empty`]);
-		const feed = tileFeed.getChildByName(`tile${i}`) as Sprite;
-		feed.addChild(tile);
-	}
+}
+
+const addNewTile = () => {
+	const tile = getRandomTile(spritesheet);
+	tile.name="new";
+	tileFeed.addChild(tile);
 }
 
 setUpBoard();
