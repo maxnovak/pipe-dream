@@ -1,4 +1,4 @@
-import { Application, BaseTexture, Container, Sprite, Spritesheet } from 'pixi.js';
+import { Application, BaseTexture, Container, Graphics, Sprite, Spritesheet, Text } from 'pixi.js';
 import { GRID_SIZE, NUMBER_OF_TILES, pipeSheet } from './constants';
 import { getRandomLocation, getRandomTile } from './utils';
 
@@ -61,12 +61,25 @@ const setUpBoard = () => {
 }
 
 const createFeed = () => {
+	const tileHighlight = new Graphics();
+	tileHighlight.beginFill(0x000000);
+	tileHighlight.drawRect(177, 106, 22, 21);
+	container.addChild(tileHighlight);
+
 	for (let i = NUMBER_OF_TILES; i >= 0; i--) {
 		const tile = getRandomTile(spritesheet);
 		tile.y = i * 18;
 		tile.name = `tile${i}`;
 		tileFeed.addChild(tile);
 	}
+
+	const text = new Text('← Next pipe to place', {
+		fontSize: 12,
+		fontFamily: "Georgia, serif",
+	});
+	text.x = 200;
+	text.y = 110;
+	container.addChild(text);
 }
 
 const addNewTile = () => {
