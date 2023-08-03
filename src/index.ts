@@ -1,4 +1,4 @@
-import { Application, BaseTexture, Container, Graphics, Sprite, Spritesheet, Text } from 'pixi.js';
+import { Application, BaseTexture, Container, Graphics, Sprite, Spritesheet, Text, Ticker } from 'pixi.js';
 import { GRID_SIZE, NUMBER_OF_TILES, pipeSheet } from './constants';
 import { getRandomLocation, getRandomTile } from './utils';
 
@@ -27,6 +27,12 @@ tileFeed.x = 180;
 tileFeed.name = 'tilefeed';
 app.stage.addChild(tileFeed);
 
+const ticker = Ticker.shared;
+ticker.stop();
+// let direction = "bottom";
+let startingTile: Sprite;
+let endingTile: Sprite;
+
 const setUpBoard = () => {
 	for (let i = 0; i < GRID_SIZE; i++) {
 		for (let j = 0; j < GRID_SIZE; j++) {
@@ -49,13 +55,11 @@ const setUpBoard = () => {
 		}
 	}
 
-	const startingTile = container.getChildByName(getRandomLocation(GRID_SIZE-2, GRID_SIZE-2)) as Sprite;
-	startingTile.name = "start";
+	startingTile = container.getChildByName(getRandomLocation(GRID_SIZE-2, GRID_SIZE-2)) as Sprite;
 	startingTile.texture = spritesheet.textures.startDownEmpty;
 	startingTile.addChild(new Sprite(spritesheet.textures.start));
 
-	const endingTile = container.getChildByName(getRandomLocation(GRID_SIZE-2, GRID_SIZE-2)) as Sprite;
-	endingTile.name = "end";
+	endingTile = container.getChildByName(getRandomLocation(GRID_SIZE-2, GRID_SIZE-2)) as Sprite;
 	endingTile.texture = spritesheet.textures.startDownEmpty;
 	endingTile.addChild(new Sprite(spritesheet.textures.end));
 }
@@ -90,3 +94,9 @@ const addNewTile = () => {
 
 setUpBoard();
 createFeed();
+
+ticker.add(() => {
+	if (ticker.lastTime > 10000) {
+		startingTile.texture = spritesheet.textures.startDownFull;
+	}
+})
