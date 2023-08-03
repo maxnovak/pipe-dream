@@ -49,12 +49,12 @@ const setUpBoard = () => {
 		}
 	}
 
-	const startingTile = container.getChildByName(getRandomLocation(GRID_SIZE, GRID_SIZE)) as Sprite;
+	const startingTile = container.getChildByName(getRandomLocation(GRID_SIZE-2, GRID_SIZE-2)) as Sprite;
 	startingTile.name = "start";
 	startingTile.texture = spritesheet.textures.startDownEmpty;
 	startingTile.addChild(new Sprite(spritesheet.textures.start));
 
-	const endingTile = container.getChildByName(getRandomLocation(GRID_SIZE, GRID_SIZE)) as Sprite;
+	const endingTile = container.getChildByName(getRandomLocation(GRID_SIZE-2, GRID_SIZE-2)) as Sprite;
 	endingTile.name = "end";
 	endingTile.texture = spritesheet.textures.startDownEmpty;
 	endingTile.addChild(new Sprite(spritesheet.textures.end));
