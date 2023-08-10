@@ -72,7 +72,7 @@ export const pipeSheet = {
 			sourceSize: { w: 16, h: 16 },
 			spriteSourceSize: { x: 0, y: 0, w: 16, h: 16 },
 		},
-		veritcalFull: {
+		verticalFull: {
 			frame: { x: 48, y:16, w:16, h:16 },
 			sourceSize: { w: 16, h: 16 },
 			spriteSourceSize: { x: 0, y: 0, w: 16, h: 16 }
