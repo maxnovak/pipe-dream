@@ -1,3 +1,5 @@
+import { Direction, Pipes } from "./types";
+
 export const pipeSheet = {
 	frames: {
 		startDownEmpty: {
@@ -59,7 +61,6 @@ export const pipeSheet = {
 			frame: { x: 0, y: 16, w: 16, h:16 },
 			sourceSize: { w: 16, h: 16 },
 			spriteSourceSize: { x: 0, y: 0, w: 16, h: 16 },
-			directions: ["left", "right"],
 		},
 		horizontalFull: {
 			frame: { x: 16, y:16, w:16, h:16 },
@@ -70,7 +71,6 @@ export const pipeSheet = {
 			frame: { x: 32, y: 16, w: 16, h:16 },
 			sourceSize: { w: 16, h: 16 },
 			spriteSourceSize: { x: 0, y: 0, w: 16, h: 16 },
-			directions: ["top", "bottom"],
 		},
 		veritcalFull: {
 			frame: { x: 48, y:16, w:16, h:16 },
@@ -81,7 +81,6 @@ export const pipeSheet = {
 			frame: { x: 64, y: 16, w: 16, h:16 },
 			sourceSize: { w: 16, h: 16 },
 			spriteSourceSize: { x: 0, y: 0, w: 16, h: 16 },
-			directions: ["bottom", "right"],
 		},
 		bend1Full: {
 			frame: { x: 80, y: 16, w:16, h:16 },
@@ -92,7 +91,6 @@ export const pipeSheet = {
 			frame: { x: 96, y: 16, w: 16, h:16 },
 			sourceSize: { w: 16, h: 16 },
 			spriteSourceSize: { x: 0, y: 0, w: 16, h: 16 },
-			directions: ["top", "right"],
 		},
 		bend2Full: {
 			frame: { x: 112, y: 16, w:16, h:16 },
@@ -103,7 +101,6 @@ export const pipeSheet = {
 			frame: { x: 128, y: 16, w: 16, h:16 },
 			sourceSize: { w: 16, h: 16 },
 			spriteSourceSize: { x: 0, y: 0, w: 16, h: 16 },
-			directions: ["top", "left"],
 		},
 		bend3Full: {
 			frame: { x: 144, y: 16, w:16, h:16 },
@@ -114,7 +111,6 @@ export const pipeSheet = {
 			frame: { x: 160, y: 16, w: 16, h:16 },
 			sourceSize: { w: 16, h: 16 },
 			spriteSourceSize: { x: 0, y: 0, w: 16, h: 16 },
-			directions: ["bottom", "left"],
 		},
 		bend4Full: {
 			frame: { x: 176, y: 16, w:16, h:16 },
@@ -138,5 +134,25 @@ export const pipeSheet = {
 
 export const GRID_SIZE = 10;
 export const NUMBER_OF_TILES = 6;
-export const PIPE_TYPES = ['horizontal', `vertical`, `bend1`, `bend2`, `bend3`, `bend4`];
+export const PIPE_TYPES: Pipes[] = ['horizontal', `vertical`, `bend1`, `bend2`, `bend3`, `bend4`];
 export const TEN_SECONDS = 10000;
+export const oppositeDirection: {
+	[K in Direction]: Direction;
+} = {
+	top: Direction.bottom,
+	bottom: Direction.top,
+	left: Direction.right,
+	right: Direction.left,
+}
+export const pipeDirections: {
+	[K in Pipes]: Direction[] | undefined;
+} = {
+	horizontal: [Direction.left, Direction.right],
+	vertical: [Direction.top, Direction.bottom],
+	bend1: [Direction.bottom, Direction.right],
+	bend2: [Direction.top, Direction.right],
+	bend3: [Direction.top, Direction.left],
+	bend4: [Direction.bottom, Direction.left],
+	empty: undefined,
+	startDown: [Direction.bottom]
+}

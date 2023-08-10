@@ -1,6 +1,6 @@
 import { Application, BaseTexture, Container, Graphics, Sprite, Spritesheet, Text, Ticker } from 'pixi.js';
 import { GRID_SIZE, NUMBER_OF_TILES, TEN_SECONDS, pipeSheet } from './constants';
-import { fillTile, getEmptyVersion, getRandomLocation, getRandomTile } from './utils';
+import { fillTile, findNextDirection, getEmptyVersion, getRandomLocation, getRandomTile } from './utils';
 import { Tile } from './types';
 
 const app = new Application({
@@ -33,10 +33,7 @@ ticker.stop();
 const board: Tile[][] = [[],[],[],[],[],[],[],[],[],[]];
 let tiles: Tile[] = [];
 let direction = "bottom";
-let startingTile: Sprite;
-let endingTile: Sprite;
 let currentTile: Tile;
-// let nextTile: Tile;
 
 const setUpBoard = () => {
 	for (let i = 0; i < GRID_SIZE; i++) {
@@ -63,18 +60,17 @@ const setUpBoard = () => {
 		}
 	}
 
-	startingTile = container.getChildByName(getRandomLocation(GRID_SIZE-2, GRID_SIZE-2)) as Sprite;
+	const startingTile = container.getChildByName(getRandomLocation(GRID_SIZE-2, GRID_SIZE-2)) as Sprite;
 	startingTile.texture = spritesheet.textures.startDownEmpty;
 	startingTile.addChild(new Sprite(spritesheet.textures.start));
 	currentTile = {
 		locationX: parseInt(startingTile.name![0]),
 		locationY: parseInt(startingTile.name![2]),
-		directions: ["bottom"],
 		name: "startDown",
 		status: "Empty"
 	}
 
-	endingTile = container.getChildByName(getRandomLocation(GRID_SIZE-2, GRID_SIZE-2)) as Sprite;
+	const endingTile = container.getChildByName(getRandomLocation(GRID_SIZE-2, GRID_SIZE-2)) as Sprite;
 	endingTile.texture = spritesheet.textures.startDownEmpty;
 	endingTile.addChild(new Sprite(spritesheet.textures.end));
 }
@@ -121,7 +117,20 @@ const moveWater = () => {
 		currentTile.locationY += 1;
 		currentTile.name = board[currentTile.locationX][currentTile.locationY].name
 	}
-	console.log(currentTile);
+	if (direction === "top") {
+		currentTile.locationY -= 1;
+		currentTile.name = board[currentTile.locationX][currentTile.locationY].name
+	}
+	if (direction === "right") {
+		currentTile.locationX += 1;
+		currentTile.name = board[currentTile.locationX][currentTile.locationY].name
+	}
+	if (direction === "left") {
+		currentTile.locationX -= 1;
+		currentTile.name = board[currentTile.locationX][currentTile.locationY].name
+	}
+
+	direction = findNextDirection(currentTile, direction);
 };
 
 ticker.add(() => {
