@@ -128,9 +128,17 @@ let timer = 0;
 const moveWater = () => {
 	if (currentTile.name === "endDown") {
 		currentTile.name = "startDown";
-		console.log("you win");
 		ticker.stop();
 		ticker.destroy();
+
+		const text = new Text('You win!', {
+			fontSize: 36,
+			fontWeight: "bold",
+			fontFamily: "Georgia, serif",
+		});
+		text.x = 10;
+		text.y = 50;
+		container.addChild(text);
 	}
 	fillTile(container, spritesheet, currentTile);
 	if (direction === "bottom") {
