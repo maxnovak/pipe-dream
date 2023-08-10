@@ -135,21 +135,18 @@ const moveWater = () => {
 	fillTile(container, spritesheet, currentTile);
 	if (direction === "bottom") {
 		currentTile.locationY += 1;
-		currentTile.name = board[currentTile.locationX][currentTile.locationY].name
 	}
 	if (direction === "top") {
 		currentTile.locationY -= 1;
-		currentTile.name = board[currentTile.locationX][currentTile.locationY].name
 	}
 	if (direction === "right") {
 		currentTile.locationX += 1;
-		currentTile.name = board[currentTile.locationX][currentTile.locationY].name
 	}
 	if (direction === "left") {
 		currentTile.locationX -= 1;
-		currentTile.name = board[currentTile.locationX][currentTile.locationY].name
 	}
 
+	currentTile.name = board[currentTile.locationX][currentTile.locationY].name
 	direction = findNextDirection(currentTile, direction);
 
 	if (direction === "ERROR") {
