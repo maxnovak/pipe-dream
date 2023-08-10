@@ -4,7 +4,6 @@ export const pipeSheet = {
 			frame: { x: 0, y: 0, w: 16, h:16 },
 			sourceSize: { w: 16, h: 16 },
 			spriteSourceSize: { x: 0, y: 0, w: 16, h: 16 },
-
 		},
 		startDownFull: {
 			frame: { x: 16, y:0, w:16, h:16 },
@@ -15,7 +14,6 @@ export const pipeSheet = {
 			frame: { x: 32, y: 0, w: 16, h:16 },
 			sourceSize: { w: 16, h: 16 },
 			spriteSourceSize: { x: 0, y: 0, w: 16, h: 16 },
-
 		},
 		startLeftFull: {
 			frame: { x: 48, y:0, w:16, h:16 },

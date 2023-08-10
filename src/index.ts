@@ -1,6 +1,7 @@
 import { Application, BaseTexture, Container, Graphics, Sprite, Spritesheet, Text, Ticker } from 'pixi.js';
 import { GRID_SIZE, NUMBER_OF_TILES, TEN_SECONDS, pipeSheet } from './constants';
-import { getEmptyVersion, getRandomLocation, getRandomTile } from './utils';
+import { fillTile, getEmptyVersion, getRandomLocation, getRandomTile } from './utils';
+import { Tile } from './types';
 
 const app = new Application({
 	view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
@@ -29,13 +30,13 @@ app.stage.addChild(tileFeed);
 
 const ticker = Ticker.shared;
 ticker.stop();
-const board: {tile: string}[][] = [[],[],[],[],[],[],[],[],[],[]];
-let tiles: string[] = [];
+const board: Tile[][] = [[],[],[],[],[],[],[],[],[],[]];
+let tiles: Tile[] = [];
 let direction = "bottom";
 let startingTile: Sprite;
 let endingTile: Sprite;
-let currentTile: { locationX: number, locationY: number, directions: string[]};
-let nextTile: { locationX: number, locationY: number, directions: string[]};
+let currentTile: Tile;
+// let nextTile: Tile;
 
 const setUpBoard = () => {
 	for (let i = 0; i < GRID_SIZE; i++) {
@@ -54,24 +55,24 @@ const setUpBoard = () => {
 					tile.y = tile.y + 18;
 				})
 				const placedTile = tiles.shift();
-				board[Math.floor(event.x / 16)][Math.floor(event.y / 16)].tile = placedTile!;
+				board[Math.floor(event.x / 16)][Math.floor(event.y / 16)] = placedTile!;
 				addNewTile();
 			});
 			container.addChild(square);
-			board[i][j] = {tile: ""}
+			board[i][j] = {locationX: i, locationY: j, name: "empty", status: "empty"}
 		}
 	}
 
 	startingTile = container.getChildByName(getRandomLocation(GRID_SIZE-2, GRID_SIZE-2)) as Sprite;
 	startingTile.texture = spritesheet.textures.startDownEmpty;
 	startingTile.addChild(new Sprite(spritesheet.textures.start));
-	console.log(startingTile.name);
 	currentTile = {
 		locationX: parseInt(startingTile.name![0]),
 		locationY: parseInt(startingTile.name![2]),
 		directions: ["bottom"],
+		name: "startDown",
+		status: "Empty"
 	}
-	console.log(currentTile)
 
 	endingTile = container.getChildByName(getRandomLocation(GRID_SIZE-2, GRID_SIZE-2)) as Sprite;
 	endingTile.texture = spritesheet.textures.startDownEmpty;
@@ -90,7 +91,7 @@ const createFeed = () => {
 		emptyTile.y = i * 18;
 		emptyTile.name = `tile${i}`;
 		tileFeed.addChild(emptyTile);
-		tiles.push(tile);
+		tiles.push({locationX:0, locationY: 0, name: tile, status:"Empty"});
 	}
 
 	const text = new Text('← Next pipe to place', {
@@ -107,7 +108,7 @@ const addNewTile = () => {
 	const emptyTile = getEmptyVersion(tile, spritesheet)
 	emptyTile.name="new";
 	tileFeed.addChild(emptyTile);
-	tiles.push(tile);
+	tiles.push({locationX:0, locationY: 0, name: tile, status: "Empty"});
 }
 
 setUpBoard();
@@ -115,20 +116,12 @@ createFeed();
 let timer = 0;
 
 const moveWater = () => {
-	if (startingTile === container.getChildByName(`${currentTile.locationX}x${currentTile.locationY}`) as Sprite) {
-		startingTile.texture = spritesheet.textures.startDownFull;
-		nextTile = {
-			locationX: currentTile.locationX,
-			locationY: currentTile.locationY,
-			directions: currentTile.directions,
-		};
-		if (direction === "bottom") {
-			nextTile.locationY += 1;
-		}
-		console.log(currentTile, nextTile);
+	fillTile(container, spritesheet, currentTile);
+	if (direction === "bottom") {
+		currentTile.locationY += 1;
+		currentTile.name = board[currentTile.locationX][currentTile.locationY].name
 	}
-	const nextTilePipes = container.getChildByName(`${nextTile.locationX}x${nextTile.locationY}`) as Sprite;
-	console.log(nextTilePipes.texture.baseTexture);
+	console.log(currentTile);
 };
 
 ticker.add(() => {
