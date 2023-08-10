@@ -154,5 +154,6 @@ export const pipeDirections: {
 	bend3: [Direction.top, Direction.left],
 	bend4: [Direction.bottom, Direction.left],
 	empty: undefined,
-	startDown: [Direction.bottom]
+	startDown: [Direction.bottom],
+	endDown: [Direction.bottom],
 }

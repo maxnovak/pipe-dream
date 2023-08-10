@@ -62,17 +62,31 @@ const setUpBoard = () => {
 
 	const startingTile = container.getChildByName(getRandomLocation(GRID_SIZE-2, GRID_SIZE-2)) as Sprite;
 	startingTile.texture = spritesheet.textures.startDownEmpty;
+	startingTile.eventMode = 'none';
 	startingTile.addChild(new Sprite(spritesheet.textures.start));
 	currentTile = {
 		locationX: parseInt(startingTile.name![0]),
 		locationY: parseInt(startingTile.name![2]),
 		name: "startDown",
-		status: "Empty"
+		status: "Empty",
+	}
+	board[parseInt(startingTile.name![0])][parseInt(startingTile.name![2])] = {
+		locationX: parseInt(startingTile.name![0]),
+		locationY: parseInt(startingTile.name![2]),
+		name: "startDown",
+		status: "Empty",
 	}
 
 	const endingTile = container.getChildByName(getRandomLocation(GRID_SIZE-2, GRID_SIZE-2)) as Sprite;
 	endingTile.texture = spritesheet.textures.startDownEmpty;
+	endingTile.eventMode = 'none';
 	endingTile.addChild(new Sprite(spritesheet.textures.end));
+	board[parseInt(endingTile.name![0])][parseInt(endingTile.name![2])] = {
+		locationX: parseInt(endingTile.name![0]),
+		locationY: parseInt(endingTile.name![2]),
+		name: "endDown",
+		status: "Empty",
+	}
 }
 
 const createFeed = () => {
@@ -112,6 +126,12 @@ createFeed();
 let timer = 0;
 
 const moveWater = () => {
+	if (currentTile.name === "endDown") {
+		currentTile.name = "startDown";
+		console.log("you win");
+		ticker.stop();
+		ticker.destroy();
+	}
 	fillTile(container, spritesheet, currentTile);
 	if (direction === "bottom") {
 		currentTile.locationY += 1;
@@ -131,6 +151,12 @@ const moveWater = () => {
 	}
 
 	direction = findNextDirection(currentTile, direction);
+
+	if (direction === "ERROR") {
+		ticker.stop();
+		ticker.destroy();
+		console.log("game over");
+	}
 };
 
 ticker.add(() => {

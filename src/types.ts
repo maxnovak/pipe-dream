@@ -4,7 +4,7 @@ export enum Direction {
     left = "left",
     right = "right"
 };
-export type Pipes = "horizontal" | "vertical" | "bend1" | "bend2" | "bend3" | "bend4" | "empty" | "startDown";
+export type Pipes = "horizontal" | "vertical" | "bend1" | "bend2" | "bend3" | "bend4" | "empty" | "startDown" | "endDown";
 export interface Tile {
     locationX: number,
     locationY: number,
