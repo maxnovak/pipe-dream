@@ -139,7 +139,24 @@ const moveWater = () => {
 		text.x = 10;
 		text.y = 50;
 		container.addChild(text);
+		return;
 	}
+
+	direction = findNextDirection(currentTile, direction);
+	if (direction === "ERROR") {
+		ticker.stop();
+		ticker.destroy();
+		const text = new Text('Game Over!', {
+			fontSize: 36,
+			fontWeight: "bold",
+			fontFamily: "Georgia, serif",
+		});
+		text.x = 10;
+		text.y = 50;
+		container.addChild(text);
+		return;
+	}
+
 	fillTile(container, spritesheet, currentTile);
 	if (direction === "bottom") {
 		currentTile.locationY += 1;
@@ -155,13 +172,6 @@ const moveWater = () => {
 	}
 
 	currentTile.name = board[currentTile.locationX][currentTile.locationY].name
-	direction = findNextDirection(currentTile, direction);
-
-	if (direction === "ERROR") {
-		ticker.stop();
-		ticker.destroy();
-		console.log("game over");
-	}
 };
 
 ticker.add(() => {

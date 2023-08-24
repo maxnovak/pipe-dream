@@ -25,6 +25,9 @@ export const findNextDirection = (tile: Tile, direction: string) => {
 	if (!allowedDirections) {
 		return "ERROR";
 	}
+	if (allowedDirections.length === 1) {
+		return "bottom"
+	}
 
 	if (oppositeDirection[allowedDirections[0]] === direction) {
 		return allowedDirections[1]
